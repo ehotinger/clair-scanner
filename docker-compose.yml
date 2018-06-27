@@ -1,0 +1,23 @@
+# docker run --volume /var/run/docker.sock:/var/run/docker.sock --volume ~/projects/src/github.com/arminc/clair-scanner:/work --workdir /work -it docker/compose:1.21.2 up
+# docker run -p 5432:5432 -d --name db arminc/clair-db:2017-09-18
+# docker run -p 6060:6060 --link db:postgres -d --name clair arminc/clair-local-scan:v2.0.1
+# ./clair-scanner --ip 172.17.0.1 alpine:latest
+# docker run --net="host" --volume /var/run/docker.sock:/var/run/docker.sock -it clair-scanner --ip 172.17.0.1 acr-builder
+version: "3"
+
+services:
+  # db:
+  #   image: arminc/clair-db:2017-09-18
+  #   ports: ["5432:5432"]
+  
+  # clair:
+  #   image: arminc/clair-local-scan:v2.0.1
+  #   ports: ["6060:6060"]
+  #   links:
+  #     - db:postgres
+
+  clair-scanner:
+    image: clair-scanner
+    # depends_on:
+    #   - clair
+    command: ["clair-scanner --ip=172.17.0.1 alpine:latest"]
